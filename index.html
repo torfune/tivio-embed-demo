@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <link rel="icon" type="image/svg+xml" href="/vite.svg" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Vite + React + TS</title>
+    <script type="text/javascript">
+      function getPreRollUrl() {
+        return `https://pubads.g.doubleclick.net/gampad/ads?iu=/21869710533/cnc260/auto/preroll_{count}/bigplayer_play/ostatni&tfcd=0&npa=0&sz=1920x1080%7C1280x720%7C1024x576%7C768x576%7C640x480%7C640x360%7C&gdfp_req=1&output=vast&unviewed_position_start=1&env=vp&impl=s&cust_params=L2%3Dcnc260%26site%3Dauto%26template%3Dbigplayer_play%26target_position%3Dpreroll_{count}%26area%3Dostatni%26URL%3D%2C%26keywords%3Dauto%2Cauta%2Ccar%2Ccars%2Cmotorky%2Cmotocykly%2Cn%C3%A1zory%2Cvideo%2Conline%2Chodnocen%C3%AD%20aut%2Cservis%2Ccrash%20testy%2Crecenze%2Czna%C4%8Dky%2Cmodely%2Cvideo%20recenze%2Chodnocen%C3%AD%2Csrovn%C3%A1vac%C3%AD%20testy%26safety%3D%26bisko%3D`
+      }
+      function getMidRollUrl() {
+        return `https://pubads.g.doubleclick.net/gampad/ads?iu=/21869710533/cnc260/auto/midroll_{count}/bigplayer_play/ostatni&tfcd=0&npa=0&sz=1920x1080%7C1280x720%7C1024x576%7C768x576%7C640x480%7C640x360%7C&gdfp_req=1&output=vast&unviewed_position_start=1&env=vp&impl=s&cust_params=L2%3Dcnc260%26site%3Dauto%26template%3Dbigplayer_play%26target_position%3Dmidroll_1%26area%3Dostatni%26URL%3D%2C%26keywords%3Dauto%2Cauta%2Ccar%2Ccars%2Cmotorky%2Cmotocykly%2Cn%C3%A1zory%2Cvideo%2Conline%2Chodnocen%C3%AD%20aut%2Cservis%2Ccrash%20testy%2Crecenze%2Czna%C4%8Dky%2Cmodely%2Cvideo%20recenze%2Chodnocen%C3%AD%2Csrovn%C3%A1vac%C3%AD%20testy%26safety%3D%26bisko%3D`
+      }
+      function getVideoId() {
+        const query = window.location.search.substring(1)
+        const params = query.split('&')
+
+        for (const param of params) {
+            const parts = param.split('=')
+            const key = decodeURIComponent(parts.shift() ?? '')
+            const value = decodeURIComponent(parts.join('='))
+            if (key === 'videoId') {
+                return value
+            }
+        }
+
+        return 'X9ET0YBpLfM6Jt6xdzi8'
+      }
+    </script>
+  </head>
+  <body>
+    <div id="root"></div>
+    <script type="module" src="/src/main.tsx"></script>
+
+    <div style="width: 800px; height: 600px;">
+
+      <!-- BEGINNING OF TIVIO EMBED CODE -->
+      <div id="tivio-embedded-player"></div>
+      <script type="text/javascript">
+        // This value will be filled dynamically by admin UI, for now it's wired to URL param "videoId" with fallback
+        const VIDEO_ID = typeof getVideoId === 'function' ? getVideoId() : 'X9ET0YBpLfM6Jt6xdzi8'
+
+        window.addEventListener('load', () => {
+          console.log('Initializing Tivio player ...');
+
+          const playerContainer = document.getElementById('tivio-embedded-player');
+          if (!playerContainer) {
+            throw new Error('Tivio player could not be initialized. A div with id "tivio-embedded-player" not found.');
+          }
+
+          if (typeof getPreRollUrl !== 'function') {
+            throw new Error('Tivio player could not be initialized. A function "getPreRollUrl" not found.');
+          }
+
+          if (typeof getMidRollUrl !== 'function') {
+            throw new Error('Tivio player could not be initialized. A function "getMidRollUrl" not found.');
+          }
+
+          const prerollUrl = encodeURIComponent(getPreRollUrl());
+          const midrollUrl = encodeURIComponent(getMidRollUrl());
+
+          // Create a new iframe element
+          const iframe = document.createElement('iframe');
+
+          // Set the src attribute to the URL you want
+          iframe.src = `https://embedded-player.tiv.io/?videoId=${VIDEO_ID}&prerollUrl=${prerollUrl}&midrollUrl=${midrollUrl}`;
+
+          // Styles
+          playerContainer.style.width = '100%';
+          playerContainer.style.height = '100%';
+          iframe.style.width = '100%';
+          iframe.style.height = '100%';
+          iframe.style.border = 'none';
+
+          // Allow fullscreen
+          iframe.setAttribute('allowfullscreen', '');
+
+          // Append the iframe to the body of the document
+          playerContainer.appendChild(iframe);
+        });
+      </script>
+      <!-- END OF TIVIO EMBED CODE -->
+
+    </div>
+
+  </body>
+</html>
